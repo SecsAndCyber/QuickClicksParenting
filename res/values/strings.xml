@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Quick Clicks Parenting</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string-array name="button_texts">
+    	<item>PLAY</item>
+    	<item>PAUSE</item>
+    	<item>{{Recording}}</item>
+    	<item>NEW SOUND</item>
+    	<item>{{BUSY}}</item>
+    </string-array>
+
+</resources>

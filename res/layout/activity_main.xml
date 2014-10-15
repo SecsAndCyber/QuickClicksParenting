@@ -1,0 +1,11 @@
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnCount="3"
+    android:rowCount="3"
+    tools:context="com.slair.quickclicksparenting.MainActivity"
+    tools:ignore="MergeRootFrame" >
+
+</GridLayout>

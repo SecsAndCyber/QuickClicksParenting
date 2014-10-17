@@ -12,17 +12,17 @@ import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.widget.GridLayout;
+import android.widget.TableLayout;
 
 public class MainActivity extends ActionBarActivity {
-	 private static final String LOG_TAG = "AudioRecordTest";
+	 static final String LOG_TAG = "AudioRecordTest";
 	    private MediaRecorder mRecorder = null;
 
 	    private List<PlayButton> mPlayButtons = new ArrayList<PlayButton>();
 	    private MediaPlayer	mPlayer = null;
 	    private Thrower		mEventThrower = new Thrower();
 
-	    private int ButtonCount = 6;
+	    private int ButtonCount = 20;
 	    private boolean mRecording = false;
 	    private boolean mPlaying = false;
 	    
@@ -60,15 +60,18 @@ public class MainActivity extends ActionBarActivity {
 	            mPlaying = true;
 		        mEventThrower.Throw(Thrower.PLAYING_STARTED, button);
 	        } catch (IOException e) {
-	            Log.e(LOG_TAG, "prepare() failed");
+	            Log.e(LOG_TAG, "startPlaying prepare() failed");
 	        }
 	    }
 
 	    private void stopPlaying(PlayButton button) {
             mPlaying = false;
-	        mPlayer.release();
-	        mEventThrower.Throw(Thrower.PLAYING_STOPPED, button);	
-	        mPlayer = null;
+            if(mPlayer != null)
+            {
+		        mPlayer.release();
+		        mEventThrower.Throw(Thrower.PLAYING_STOPPED, button);	
+		        mPlayer = null;
+            }
 	    }
 
 	    private void startRecording(PlayButton button) {
@@ -87,7 +90,7 @@ public class MainActivity extends ActionBarActivity {
 	        try {
 	            mRecorder.prepare();
 	        } catch (IOException e) {
-	            Log.e(LOG_TAG, "prepare() failed");
+	            Log.e(LOG_TAG, "startRecording prepare() failed");
 	        }
 	        toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 20);
 	        mRecorder.start(); 
@@ -107,7 +110,7 @@ public class MainActivity extends ActionBarActivity {
 			        toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 20);
 			        toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 20);
 		        } catch (Exception e) {
-		            Log.e(LOG_TAG, "prepare() failed");
+		            Log.e(LOG_TAG, "stopRecording prepare() failed");
 		        }
 	    	}
 	    }
@@ -144,9 +147,7 @@ public class MainActivity extends ActionBarActivity {
 	        super.onCreate(icicle);
 	        setContentView(R.layout.activity_main);
 
-	        GridLayout ll = (GridLayout)findViewById(R.id.container);	     
-
-	        ButtonCount = ll.getRowCount() * ll.getColumnCount();
+	        TableLayout ll = (TableLayout)findViewById(R.id.container);	     
 	        
 	        PlayButton tmpButton;
 	        

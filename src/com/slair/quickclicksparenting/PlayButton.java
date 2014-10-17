@@ -12,6 +12,7 @@ import com.slair.quickclicksparenting.MainActivity.Thrower;
 
 import android.content.Context;
 import android.os.Environment;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +24,9 @@ public class PlayButton extends Button implements ThrowListener {
     private File f = null;
     boolean mPressed = false;
     boolean mRecorded = false;
+    private float mDownX;
+    private float mDownY;
+    private final float SCROLL_THRESHOLD = 10;
     
     String mMessageName;    
     
@@ -56,13 +60,29 @@ public class PlayButton extends Button implements ThrowListener {
     
     private OnTouchListener toucher = new OnTouchListener() {
         public boolean onTouch(View v, MotionEvent event) {
-            switch(event.getAction()) {
+    		int action = event.getAction();
+            switch(action) {
             case MotionEvent.ACTION_DOWN:
                 // Start
+                mDownX = event.getX();
+                mDownY = event.getY();
             	mPressed = true;
 				mRecorded = false;
 				scheduled = t.schedule(task, 2, TimeUnit.SECONDS);
                 break;
+            case MotionEvent.ACTION_CANCEL:
+            case MotionEvent.ACTION_MOVE:
+            	if(mRecorded)
+            	{
+            		// Don't interrupt a record because of a slide
+            		break;
+            	}
+                if (!(mPressed && (Math.abs(mDownX - event.getX()) > SCROLL_THRESHOLD || Math.abs(mDownY - event.getY()) > SCROLL_THRESHOLD))) {
+                	// If we did not scroll, don't cancel
+                	break;
+                }
+            	Log.e(com.slair.quickclicksparenting.MainActivity.LOG_TAG, String.format("Received event ACTION_MOVE %d", action));
+                // Fall though and cancel a recording attempt for scrolling
             case MotionEvent.ACTION_UP:
             	try {
 					if(scheduled != null)
@@ -79,6 +99,9 @@ public class PlayButton extends Button implements ThrowListener {
             	}
                 // End
                 break;
+                default:
+                	Log.e(com.slair.quickclicksparenting.MainActivity.LOG_TAG, String.format("Received event %d", action));
+                	
             }
             return false;
         }

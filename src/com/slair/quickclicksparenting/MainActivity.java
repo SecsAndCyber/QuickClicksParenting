@@ -4,17 +4,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.ActionBar;
+import android.app.Activity;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaRecorder;
 import android.media.ToneGenerator;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.TableLayout;
+import android.widget.Toast;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity  {
 	 static final String LOG_TAG = "AudioRecordTest";
 	    private MediaRecorder mRecorder = null;
 
@@ -141,15 +146,35 @@ public class MainActivity extends ActionBarActivity {
 	    
 	    public MainActivity() {
 	    }
-
+	    
+	    @Override
+	    public boolean onCreateOptionsMenu(Menu menu) {
+	        MenuInflater inflater = getMenuInflater();
+	        inflater.inflate(R.menu.main, menu);
+	        return super.onCreateOptionsMenu(menu);
+	    }
+	    @Override	    
+	    public boolean onOptionsItemSelected(MenuItem item) {
+	    	int itemId = item.getItemId();
+		    switch (itemId) {
+		    case R.id.action_settings:
+		    	showToast("Clicked Settings");
+		    	break;
+		    }
+		    Log.i(LOG_TAG, String.format("Item %d clicked",itemId));
+		    return super.onOptionsItemSelected(item);
+	    }
 	    @Override
 	    public void onCreate(Bundle icicle) {
 	        super.onCreate(icicle);
 	        setContentView(R.layout.activity_main);
+	        
+	        ActionBar actionBar = getActionBar();
+	        actionBar.show();
 
 	        TableLayout ll = (TableLayout)findViewById(R.id.container);	     
 	        
-	        PlayButton tmpButton;
+	        PlayButton tmpButton; 
 	        
 	        for(Integer x = 0; x < ButtonCount; x++)
 	        {
@@ -176,4 +201,9 @@ public class MainActivity extends ActionBarActivity {
 	        }
 	    }
 
+	    public void showToast(String message)	    
+	    {	     
+		    Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);  
+		    toast.show();	     
+	    }
 }

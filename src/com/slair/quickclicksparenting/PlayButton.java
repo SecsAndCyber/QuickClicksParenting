@@ -77,6 +77,12 @@ public class PlayButton extends Button implements ThrowListener {
             		// Don't interrupt a record because of a slide
             		break;
             	}
+                if ((mPressed && (mDownX - event.getX() > SCROLL_THRESHOLD))) {
+                	onSwipeLeft(v,event);
+                }
+                else if ((mPressed && (Math.abs(mDownX - event.getX()) > SCROLL_THRESHOLD))) {
+                	onSwipeRight(v,event);
+                }
                 if (!(mPressed && (Math.abs(mDownX - event.getX()) > SCROLL_THRESHOLD || Math.abs(mDownY - event.getY()) > SCROLL_THRESHOLD))) {
                 	// If we did not scroll, don't cancel
                 	break;
@@ -107,6 +113,16 @@ public class PlayButton extends Button implements ThrowListener {
         }
     };
 
+
+    private void onSwipeLeft(View v, MotionEvent event)
+    {
+    	Log.i(com.slair.quickclicksparenting.MainActivity.LOG_TAG, "Swiped left");
+    }
+    private void onSwipeRight(View v, MotionEvent event)
+    {
+    	Log.i(com.slair.quickclicksparenting.MainActivity.LOG_TAG, "Swiped right");
+    }
+    
     public PlayButton(Context ctx) {
         this(ctx, "item");
     }
